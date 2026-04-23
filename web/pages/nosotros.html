@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nosotros — INGENIO ARTE & MADERA</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/pages.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav-principal">
+    <a href="../login.html">
+      <img src="../IMG/logo.png" alt="Ingenio Arte y Madera" onerror="this.style.display='none'">
+    </a>
+
+    <ul class="menu">
+      <li>
+        <a class="boton-menu" href="shop.html">
+          <i class="bi bi-shop"></i> TIENDA
+        </a>
+      </li>
+      <li class="dropdown">
+        <button class="boton-menu">
+          <i class="bi bi-suit-diamond-fill"></i> CATEGORÍAS
+        </button>
+        <ul class="dropdown-menu">
+          <li><a href="shop.html">Sillas</a></li>
+          <li><a href="shop.html">Mesas</a></li>
+          <li><a href="shop.html">Sillones</a></li>
+          <li><a href="shop.html">Camas</a></li>
+        </ul>
+      </li>
+      <li>
+        <a class="boton-menu active" href="nosotros.html">
+          <i class="bi bi-suitcase-lg-fill"></i> NOSOTROS
+        </a>
+      </li>
+      <div class="separador-nav"></div>
+      <li>
+        <button class="boton-menu" id="btn-login-nav" onclick="window.location.href='../login.html'">
+          <i class="bi bi-person-fill"></i> INICIAR SESIÓN
+        </button>
+      </li>
+      <li>
+        <a class="boton-menu" href="carrito.html">
+          <i class="bi bi-cart-plus-fill"></i> CARRITO
+          <span class="numerito">0</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="nosotros-main">
+    <h1 class="quienes-titulo">¿Quiénes Somos?</h1>
+
+    <div class="cards-grid">
+      <div class="card">
+        <h2><i class="bi bi-tree"></i> Nuestra Historia</h2>
+        <p>
+          Ingenio Arte & Madera nació de la pasión por la madera y el diseño artesanal.
+          Desde nuestros talleres, creamos muebles únicos que combinan tradición
+          y modernidad, pensados para durar generaciones.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2><i class="bi bi-award"></i> Nuestra Misión</h2>
+        <p>
+          Transformar la madera en piezas que cuenten historias. Cada mueble
+          que fabricamos lleva el sello de la dedicación artesanal y el compromiso
+          con la calidad y la sostenibilidad.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2><i class="bi bi-eye"></i> Nuestra Visión</h2>
+        <p>
+          Ser la marca de referencia en muebles artesanales de Colombia,
+          expandiendo nuestra presencia y llevando el arte en madera a cada hogar
+          que valore lo auténtico.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2><i class="bi bi-people-fill"></i> Nuestro Equipo</h2>
+        <p>
+          Somos Sebastián y Mafe, estudiantes apasionados por el desarrollo
+          y el diseño. Este proyecto nació como una práctica académica
+          y se convirtió en algo que nos llena de orgullo.
+        </p>
+      </div>
+    </div>
+
+    <div class="card-contacto">
+      <h2>¡Contáctanos!</h2>
+      <p>
+        ¿Tienes alguna pregunta o quieres un mueble personalizado?
+        Estamos aquí para ayudarte. Escríbenos o síguenos en nuestras redes sociales.
+      </p>
+      <div class="redes">
+        <a href="#" class="red-btn" title="Instagram">
+          <i class="bi bi-instagram"></i>
+        </a>
+        <a href="#" class="red-btn" title="Facebook">
+          <i class="bi bi-facebook"></i>
+        </a>
+        <a href="#" class="red-btn" title="WhatsApp">
+          <i class="bi bi-whatsapp"></i>
+        </a>
+        <a href="#" class="red-btn" title="Email">
+          <i class="bi bi-envelope-fill"></i>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>by Sebas y Mafe © 2025 — INGENIO ARTE & MADERA</p>
+  </footer>
+
+  <script src="../js/utils.js"></script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+/* ══════════════════════════════
+   LOGIN
+   ══════════════════════════════ */
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-secundario) 100%);
+  padding: 20px;
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+  text-align: center;
+}
+
+.login-card img {
+  width: 130px;
+  margin-bottom: 20px;
+}
+
+.login-card h2 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-primario);
+  margin-bottom: 6px;
+}
+
+.login-card p.subtitulo {
+  font-size: 0.88rem;
+  color: #888;
+  margin-bottom: 24px;
+}
+
+.login-tabs {
+  display: flex;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 22px;
+}
+
+.login-tab {
+  flex: 1;
+  padding: 9px;
+  background: none;
+  border: none;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #aaa;
+  cursor: pointer;
+  transition: color var(--transicion), border-bottom var(--transicion);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+}
+
+.login-tab.active {
+  color: var(--color-primario);
+  border-bottom-color: var(--color-primario);
+}
+
+.login-form { display: none; }
+.login-form.active { display: block; }
+
+.campo-input {
+  position: relative;
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.campo-input label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.campo-input input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: border var(--transicion);
+}
+
+.campo-input input:focus { outline: none; border-color: var(--color-primario); }
+.campo-input input.error { border-color: var(--color-error); }
+.campo-error { font-size: 0.78rem; color: var(--color-error); margin-top: 3px; display: none; }
+.campo-error.visible { display: block; }
+
+.btn-login {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: opacity var(--transicion), transform 0.15s;
+}
+
+.btn-login:hover { opacity: 0.9; transform: translateY(-2px); }
+
+.login-mensaje {
+  font-size: 0.85rem;
+  margin-top: 12px;
+  min-height: 22px;
+  font-weight: 600;
+}
+
+.login-mensaje.error   { color: var(--color-error); }
+.login-mensaje.success { color: var(--color-exito); }
+
+.login-link {
+  display: block;
+  margin-top: 16px;
+  font-size: 0.83rem;
+  color: #666;
+}
+
+.login-link a { color: var(--color-primario); font-weight: 700; text-decoration: none; }
+.login-link a:hover { text-decoration: underline; }
+
+/* ══════════════════════════════
+   NOSOTROS
+   ══════════════════════════════ */
+.nosotros-main {
+  padding: 50px 40px;
+}
+
+.quienes-titulo {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1e1e2e;
+  margin-bottom: 40px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px 28px;
+  box-shadow: var(--sombra-suave);
+  text-align: left;
+}
+
+.card h2 { font-size: 1.2rem; font-weight: 800; color: var(--color-primario); margin-bottom: 14px; }
+.card p  { font-size: 0.95rem; line-height: 1.7; color: #444; }
+
+.card-contacto {
+  background: #fff;
+  border-radius: 12px;
+  padding: 36px 28px;
+  box-shadow: var(--sombra-suave);
+  text-align: center;
+}
+
+.card-contacto h2 { font-size: 1.3rem; font-weight: 800; color: var(--color-secundario); margin-bottom: 12px; }
+.card-contacto p  { font-size: 0.95rem; color: #555; max-width: 560px; margin: 0 auto 28px; line-height: 1.6; }
+
+.redes { display: flex; justify-content: center; gap: 18px; }
+
+.red-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-secundario), #a04520);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  text-decoration: none;
+  transition: transform var(--transicion), opacity var(--transicion);
+}
+
+.red-btn:hover { transform: translateY(-3px); opacity: 0.9; }
+
+@media (max-width: 768px) {
+  .nosotros-main { padding: 30px 16px; }
+  .cards-grid { grid-template-columns: 1fr; }
+}

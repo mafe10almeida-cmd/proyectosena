@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tienda — INGENIO ARTE & MADERA</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/shop.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+  <!-- Estilos adicionales para el catálogo dinámico -->
+  <style>
+    #catalogo-productos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 24px;
+      margin-top: 32px;
+      text-align: left;
+    }
+
+    .tarjeta-producto {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--sombra-suave);
+      display: flex;
+      flex-direction: column;
+      transition: transform var(--transicion), box-shadow var(--transicion);
+    }
+
+    .tarjeta-producto:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--sombra-media);
+    }
+
+    .tarjeta-imagen {
+      height: 180px;
+      overflow: hidden;
+      background: #f0ece6;
+    }
+
+    .tarjeta-imagen img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .tarjeta-info {
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .tarjeta-info h3 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--color-primario);
+    }
+
+    .tarjeta-info p {
+      font-size: 0.85rem;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    .tarjeta-precio {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--color-secundario);
+      margin-top: auto;
+    }
+
+    .btn-agregar {
+      margin: 0 16px 16px;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity var(--transicion), transform 0.15s;
+    }
+
+    .btn-agregar:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .btn-cant {
+      background: #f0ece6;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      width: 26px;
+      height: 26px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--color-primario);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav-principal">
+    <a href="../login.html">
+      <img src="../IMG/logo.png" alt="Ingenio Arte y Madera" onerror="this.style.display='none'">
+    </a>
+
+    <ul class="menu">
+      <li>
+        <a class="boton-menu active" href="shop.html">
+          <i class="bi bi-shop"></i> TIENDA
+        </a>
+      </li>
+
+      <li class="dropdown">
+        <button class="boton-menu">
+          <i class="bi bi-suit-diamond-fill"></i> CATEGORÍAS
+        </button>
+        <ul class="dropdown-menu">
+          <li><a href="#" onclick="filtrarCategoria('silla')">Sillas</a></li>
+          <li><a href="#" onclick="filtrarCategoria('mesa')">Mesas</a></li>
+          <li><a href="#" onclick="filtrarCategoria('sillón')">Sillones</a></li>
+          <li><a href="#" onclick="filtrarCategoria('cama')">Camas</a></li>
+          <li><a href="#" onclick="filtrarCategoria('')">Ver todos</a></li>
+        </ul>
+      </li>
+
+      <li>
+        <a class="boton-menu" href="nosotros.html">
+          <i class="bi bi-suitcase-lg-fill"></i> NOSOTROS
+        </a>
+      </li>
+
+      <div class="separador-nav"></div>
+
+      <li>
+        <button class="boton-menu" id="btn-login-nav" onclick="irLogin()">
+          <i class="bi bi-person-fill"></i> INICIAR SESIÓN
+        </button>
+      </li>
+
+      <li style="display:none" id="btn-logout-nav">
+        <button class="boton-menu" onclick="cerrarSesion()" style="color:#ffcdd2;">
+          <i class="bi bi-box-arrow-right"></i> SALIR
+        </button>
+      </li>
+
+      <li>
+        <a class="boton-menu" href="carrito.html">
+          <i class="bi bi-cart-plus-fill"></i> CARRITO
+          <span class="numerito">0</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- MAIN -->
+  <main>
+    <h2 class="titulo-principal">Catálogo de Productos</h2>
+
+    <!-- Filtro de búsqueda -->
+    <div style="display:flex;justify-content:center;margin-bottom:8px;">
+      <input
+        type="text"
+        id="buscar-shop"
+        placeholder="🔍 Buscar producto..."
+        oninput="filtrarBusqueda(this.value)"
+        style="padding:10px 16px;border:1.5px solid #ddd;border-radius:8px;font-size:0.9rem;width:100%;max-width:400px;">
+    </div>
+
+    <!-- Categorías visuales -->
+    <div class="categorias">
+      <div class="contenedor-categoria" onclick="filtrarCategoria('silla')">
+        <img src="../IMG/01.jpg" alt="Sillas">
+        <h3>SILLAS</h3>
+        <button class="boton-categoria">VER</button>
+      </div>
+      <div class="contenedor-categoria" onclick="filtrarCategoria('mesa')">
+        <img src="../IMG/mesa01.png" alt="Mesas">
+        <h3>MESAS</h3>
+        <button class="boton-categoria">VER</button>
+      </div>
+      <div class="contenedor-categoria" onclick="filtrarCategoria('sillón')">
+        <img src="../IMG/sillon01.png" alt="Sillones">
+        <h3>SILLONES</h3>
+        <button class="boton-categoria">VER</button>
+      </div>
+    </div>
+
+    <!-- Productos dinámicos -->
+    <div id="catalogo-productos">
+      <p style="color:#aaa;text-align:center;grid-column:1/-1;">Cargando productos...</p>
+    </div>
+  </main>
+
+  <footer>
+    <p>by Sebas y Mafe © 2025 — INGENIO ARTE & MADERA</p>
+  </footer>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/shop.js"></script>
+  <script>
+    let todosLosProductos = [];
+
+    // Override renderizarCatalogo para guardar referencia
+    const _renderOriginal = renderizarCatalogo;
+    // Parche para guardar productos al cargar
+    const _cargarOriginal = cargarCatalogo;
+
+    function filtrarCategoria(cat) {
+      const filtrados = cat
+        ? todosLosProductos.filter(p => p.nombre.toLowerCase().includes(cat.toLowerCase()))
+        : todosLosProductos;
+      renderizarCatalogo(filtrados);
+      document.getElementById('buscar-shop').value = cat;
+    }
+
+    function filtrarBusqueda(texto) {
+      const filtrados = todosLosProductos.filter(p =>
+        p.nombre.toLowerCase().includes(texto.toLowerCase()) ||
+        (p.descripcion || '').toLowerCase().includes(texto.toLowerCase())
+      );
+      renderizarCatalogo(filtrados);
+    }
+
+    function irLogin() {
+      window.location.href = '../login.html';
+    }
+  </script>
+</body>
+</html>

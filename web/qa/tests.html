@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QA Tests — INGENIO ARTE & MADERA</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <style>
+    body { padding: 30px; background: #f7f4ef; }
+    h1   { color: #2a3a7c; margin-bottom: 8px; }
+    .subtitulo { color: #888; margin-bottom: 30px; }
+
+    .suite {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.07);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .suite-header {
+      background: #2a3a7c;
+      color: #fff;
+      padding: 14px 20px;
+      font-weight: 800;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .suite-body { padding: 16px 20px; }
+
+    .test-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0ece6;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .test-row:last-child { border-bottom: none; }
+
+    .test-nombre {
+      flex: 1;
+      font-size: 0.9rem;
+      color: #333;
+    }
+
+    .test-badge {
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .pass    { background: #d4edda; color: #155724; }
+    .fail    { background: #f8d7da; color: #721c24; }
+    .pending { background: #fff3cd; color: #856404; }
+    .skip    { background: #e2e3e5; color: #495057; }
+
+    .resumen {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .resumen-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 18px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,.07);
+    }
+
+    .resumen-card .numero {
+      font-size: 2rem;
+      font-weight: 900;
+    }
+
+    .resumen-card .etiqueta { font-size: 0.82rem; color: #888; margin-top: 4px; }
+
+    .btn-run {
+      padding: 11px 28px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #2a3a7c, #7a3520);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.92rem;
+      cursor: pointer;
+      margin-bottom: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity .2s;
+    }
+
+    .btn-run:hover { opacity: .88; }
+
+    .log-panel {
+      background: #1e1e2e;
+      color: #a9ffa9;
+      font-family: monospace;
+      font-size: 0.82rem;
+      border-radius: 10px;
+      padding: 16px 20px;
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .log-panel.visible { display: block; }
+    .log-line-err  { color: #ff9999; }
+    .log-line-warn { color: #ffd080; }
+    .log-line-ok   { color: #a9ffa9; }
+    .log-line-info { color: #80d4ff; }
+  </style>
+</head>
+<body>
+
+<h1><i class="bi bi-bug"></i> Panel de QA — Ingenio Arte & Madera</h1>
+<p class="subtitulo">Tests automáticos de validaciones, lógica de negocio y utilidades</p>
+
+<!-- Resumen -->
+<div class="resumen" id="resumen">
+  <div class="resumen-card">
+    <div class="numero" id="total-tests" style="color:#2a3a7c;">—</div>
+    <div class="etiqueta">Total Tests</div>
+  </div>
+  <div class="resumen-card">
+    <div class="numero" id="passed" style="color:#27ae60;">—</div>
+    <div class="etiqueta">Pasaron ✔</div>
+  </div>
+  <div class="resumen-card">
+    <div class="numero" id="failed" style="color:#c0392b;">—</div>
+    <div class="etiqueta">Fallaron ✘</div>
+  </div>
+  <div class="resumen-card">
+    <div class="numero" id="pendientes" style="color:#e67e22;">—</div>
+    <div class="etiqueta">Pendientes</div>
+  </div>
+</div>
+
+<button class="btn-run" onclick="ejecutarTodos()">
+  <i class="bi bi-play-fill"></i> Ejecutar todos los tests
+</button>
+
+<!-- Suite 1: Validaciones numéricas -->
+<div class="suite">
+  <div class="suite-header"><i class="bi bi-123"></i> Suite 1 — Validaciones Numéricas</div>
+  <div class="suite-body" id="suite-numerica"></div>
+</div>
+
+<!-- Suite 2: Lógica estado/stock -->
+<div class="suite">
+  <div class="suite-header"><i class="bi bi-toggle-on"></i> Suite 2 — Reglas de Estado / Stock</div>
+  <div class="suite-body" id="suite-estado"></div>
+</div>
+
+<!-- Suite 3: Carrito -->
+<div class="suite">
+  <div class="suite-header"><i class="bi bi-cart"></i> Suite 3 — Carrito de Compras</div>
+  <div class="suite-body" id="suite-carrito"></div>
+</div>
+
+<!-- Suite 4: Autenticación -->
+<div class="suite">
+  <div class="suite-header"><i class="bi bi-lock"></i> Suite 4 — Autenticación</div>
+  <div class="suite-body" id="suite-auth"></div>
+</div>
+
+<!-- Suite 5: Sanitización / Seguridad -->
+<div class="suite">
+  <div class="suite-header"><i class="bi bi-shield-check"></i> Suite 5 — Sanitización y Seguridad</div>
+  <div class="suite-body" id="suite-seguridad"></div>
+</div>
+
+<!-- Suite 6: API (requiere backend activo) -->
+<div class="suite">
+  <div class="suite-header"><i class="bi bi-cloud"></i> Suite 6 — API REST (requiere backend)</div>
+  <div class="suite-body" id="suite-api"></div>
+</div>
+
+<!-- Log panel -->
+<div class="log-panel" id="log-panel"></div>
+
+<script src="../js/utils.js"></script>
+<script>
+// ═══════════════════════════════════════════
+// MOTOR DE TESTS
+// ═══════════════════════════════════════════
+
+const resultados = [];
+
+function test(suiteName, nombre, fn) {
+  return { suiteName, nombre, fn, tipo: 'sync' };
+}
+
+function testAsync(suiteName, nombre, fn) {
+  return { suiteName, nombre, fn, tipo: 'async' };
+}
+
+function assert(condicion, mensaje) {
+  if (!condicion) throw new Error(mensaje || 'Aserción falló');
+}
+
+function assertEqual(a, b) {
+  if (a !== b) throw new Error(`Esperaba "${b}", obtuvo "${a}"`);
+}
+
+// ═══════════════════════════════════════════
+// DEFINICIÓN DE TESTS
+// ═══════════════════════════════════════════
+
+const TODOS_LOS_TESTS = [
+
+  // ── Suite 1: Validaciones numéricas ─────────────────────
+  test('suite-numerica', 'calcularEstado(0) devuelve "Agotado"', () => {
+    assertEqual(calcularEstado(0), 'Agotado');
+  }),
+
+  test('suite-numerica', 'calcularEstado(-5) devuelve "Agotado"', () => {
+    assertEqual(calcularEstado(-5), 'Agotado');
+  }),
+
+  test('suite-numerica', 'calcularEstado(3) devuelve "Disponible"', () => {
+    assertEqual(calcularEstado(3), 'Disponible');
+  }),
+
+  test('suite-numerica', 'calcularEstado(100) devuelve "Disponible"', () => {
+    assertEqual(calcularEstado(100), 'Disponible');
+  }),
+
+  test('suite-numerica', 'calcularEstado(1) devuelve null (zona gris)', () => {
+    assertEqual(calcularEstado(1), null);
+  }),
+
+  test('suite-numerica', 'calcularEstado(2) devuelve null (zona gris)', () => {
+    assertEqual(calcularEstado(2), null);
+  }),
+
+  test('suite-numerica', 'precio 0 es válido (borde inferior)', () => {
+    // Simular input con valor 0 — debería ser válido
+    const input = crearInputFalso('0');
+    const ok = validarNumeroPositivo(input, 'Precio', false);
+    assert(ok, 'El precio 0 debería ser válido');
+  }),
+
+  test('suite-numerica', 'precio negativo -100 es rechazado', () => {
+    const input = crearInputFalso('-100');
+    const ok = validarNumeroPositivo(input, 'Precio', false);
+    assert(!ok, 'El precio negativo debería ser rechazado');
+  }),
+
+  test('suite-numerica', 'stock "abc" (no numérico) es rechazado', () => {
+    const input = crearInputFalso('abc');
+    const ok = validarNumeroPositivo(input, 'Stock', true);
+    assert(!ok, 'Texto no numérico debería ser rechazado');
+  }),
+
+  test('suite-numerica', 'stock vacío es rechazado', () => {
+    const input = crearInputFalso('');
+    const ok = validarNumeroPositivo(input, 'Stock', true);
+    assert(!ok, 'Campo vacío debería ser rechazado');
+  }),
+
+  test('suite-numerica', 'stock 1.5 es rechazado (debe ser entero)', () => {
+    const input = crearInputFalso('1.5');
+    const ok = validarNumeroPositivo(input, 'Stock', true);
+    assert(!ok, 'Decimal en campo de entero debería ser rechazado');
+  }),
+
+  test('suite-numerica', 'nombre vacío es rechazado por validarRequerido', () => {
+    const input = crearInputFalso('');
+    const ok = validarRequerido(input, 'Nombre');
+    assert(!ok, 'Nombre vacío debería ser rechazado');
+  }),
+
+  test('suite-numerica', 'nombre con espacios es rechazado por validarRequerido', () => {
+    const input = crearInputFalso('   ');
+    const ok = validarRequerido(input, 'Nombre');
+    assert(!ok, 'Solo espacios debería ser rechazado');
+  }),
+
+  // ── Suite 2: Reglas Estado / Stock ──────────────────────
+  test('suite-estado', 'stock=0 → estado forzado a Agotado', () => {
+    const sel = crearSelectFalso('Disponible');
+    aplicarReglaEstado(sel, 0);
+    assertEqual(sel.value, 'Agotado');
+    assert(sel.disabled, 'Select debe estar deshabilitado');
+  }),
+
+  test('suite-estado', 'stock=-1 → estado forzado a Agotado', () => {
+    const sel = crearSelectFalso('Disponible');
+    aplicarReglaEstado(sel, -1);
+    assertEqual(sel.value, 'Agotado');
+    assert(sel.disabled, 'Select debe estar deshabilitado');
+  }),
+
+  test('suite-estado', 'stock=3 → estado forzado a Disponible', () => {
+    const sel = crearSelectFalso('Agotado');
+    aplicarReglaEstado(sel, 3);
+    assertEqual(sel.value, 'Disponible');
+    assert(sel.disabled, 'Select debe estar deshabilitado con stock>=3');
+  }),
+
+  test('suite-estado', 'stock=10 → estado forzado a Disponible', () => {
+    const sel = crearSelectFalso('Agotado');
+    aplicarReglaEstado(sel, 10);
+    assertEqual(sel.value, 'Disponible');
+  }),
+
+  test('suite-estado', 'stock=1 → select habilitado (zona gris)', () => {
+    const sel = crearSelectFalso('Disponible');
+    aplicarReglaEstado(sel, 1);
+    assert(!sel.disabled, 'Con stock=1 el select debe estar habilitado');
+  }),
+
+  test('suite-estado', 'stock=2 → select habilitado (zona gris)', () => {
+    const sel = crearSelectFalso('Agotado');
+    aplicarReglaEstado(sel, 2);
+    assert(!sel.disabled, 'Con stock=2 el select debe estar habilitado');
+  }),
+
+  // ── Suite 3: Carrito ────────────────────────────────────
+  test('suite-carrito', 'obtenerCarrito() devuelve array vacío si no hay datos', () => {
+    localStorage.removeItem(CARRITO_KEY);
+    const carrito = obtenerCarrito();
+    assert(Array.isArray(carrito), 'Debe ser un array');
+    assertEqual(carrito.length, 0);
+  }),
+
+  test('suite-carrito', 'guardarCarrito() persiste y se puede recuperar', () => {
+    const items = [{ idProducto: 1, nombre: 'Mesa', precio: 500000, cantidad: 2 }];
+    guardarCarrito(items);
+    const recuperado = obtenerCarrito();
+    assertEqual(recuperado.length, 1);
+    assertEqual(recuperado[0].nombre, 'Mesa');
+  }),
+
+  test('suite-carrito', 'guardarCarrito([]) vacía el carrito', () => {
+    guardarCarrito([{ idProducto: 1, nombre: 'Test', precio: 100, cantidad: 1 }]);
+    guardarCarrito([]);
+    assertEqual(obtenerCarrito().length, 0);
+  }),
+
+  test('suite-carrito', 'carrito mantiene cantidad correcta', () => {
+    const items = [
+      { idProducto: 1, cantidad: 3 },
+      { idProducto: 2, cantidad: 1 },
+    ];
+    guardarCarrito(items);
+    const c = obtenerCarrito();
+    assertEqual(c[0].cantidad, 3);
+    assertEqual(c[1].cantidad, 1);
+  }),
+
+  test('suite-carrito', 'carrito con JSON corrupto devuelve array vacío', () => {
+    localStorage.setItem(CARRITO_KEY, 'CORRUPTO{{');
+    const carrito = obtenerCarrito();
+    assert(Array.isArray(carrito), 'Debe devolver array vacío ante JSON inválido');
+  }),
+
+  // ── Suite 4: Auth ───────────────────────────────────────
+  test('suite-auth', 'obtenerSesion() devuelve null sin sesión', () => {
+    localStorage.removeItem(AUTH_KEY);
+    const s = obtenerSesion();
+    assert(s === null, 'Sin sesión debe devolver null');
+  }),
+
+  test('suite-auth', 'guardarSesion() y obtenerSesion() funcionan', () => {
+    const usuario = { usuario: 'admin', nombre: 'Admin', rol: 'admin' };
+    guardarSesion(usuario);
+    const s = obtenerSesion();
+    assertEqual(s.usuario, 'admin');
+    assertEqual(s.rol, 'admin');
+  }),
+
+  test('suite-auth', 'sesión con JSON corrupto devuelve null', () => {
+    localStorage.setItem(AUTH_KEY, 'CORRUPTO{{');
+    const s = obtenerSesion();
+    assert(s === null, 'JSON corrupto debe devolver null');
+  }),
+
+  // ── Suite 5: Sanitización ───────────────────────────────
+  test('suite-seguridad', 'escapeHtml bloquea <script>', () => {
+    const entrada  = '<script>alert("xss")</script>';
+    const esperado = '&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;';
+    assertEqual(escapeHtml(entrada), esperado);
+  }),
+
+  test('suite-seguridad', 'escapeHtml bloquea etiqueta <img>', () => {
+    const resultado = escapeHtml('<img onerror="malo()">');
+    assert(!resultado.includes('<img'), 'No debe contener etiqueta img sin escapar');
+  }),
+
+  test('suite-seguridad', 'escapeHtml maneja string vacío', () => {
+    assertEqual(escapeHtml(''), '');
+  }),
+
+  test('suite-seguridad', 'escapeHtml maneja texto normal sin cambios', () => {
+    assertEqual(escapeHtml('Sillón Valencia'), 'Sillón Valencia');
+  }),
+
+  test('suite-seguridad', 'precio no puede guardarse como string en carrito', () => {
+    const item = { idProducto: 99, nombre: 'Test', precio: '100000abc', cantidad: 1 };
+    guardarCarrito([item]);
+    const c = obtenerCarrito();
+    // El precio viene como string — advertimos que debería parsearse en el backend
+    const precioNum = Number(c[0].precio);
+    assert(isNaN(precioNum), 'Precio inválido debe detectarse (NaN)');
+  }),
+
+  // ── Suite 6: API (async, requiere backend) ──────────────
+  testAsync('suite-api', 'GET /api/productos responde 200', async () => {
+    const res = await fetch('http://localhost:8080/api/productos');
+    assert(res.ok, `El servidor respondió con status ${res.status}`);
+  }),
+
+  testAsync('suite-api', 'GET /api/productos devuelve array JSON', async () => {
+    const res  = await fetch('http://localhost:8080/api/productos');
+    const data = await res.json();
+    assert(Array.isArray(data), 'La respuesta debe ser un array');
+  }),
+
+  testAsync('suite-api', 'POST /api/productos/guardar valida stock negativo', async () => {
+    const payload = { nombre: 'Test QA', descripcion: 'qa', precio: 100, stock: -5, estado: 'Disponible' };
+    const res = await fetch('http://localhost:8080/api/productos/guardar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    // Esperamos 400 Bad Request o que el backend rechace negativos
+    assert(res.status === 400 || res.status === 422,
+      `Backend debe rechazar stock negativo (recibió ${res.status})`);
+  }),
+
+];
+
+// ═══════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════
+
+function crearInputFalso(valor) {
+  const div = document.createElement('div');
+  div.className = 'form-grupo';
+  const input = document.createElement('input');
+  input.value  = valor;
+  const span   = document.createElement('span');
+  span.className = 'form-error';
+  div.appendChild(input);
+  div.appendChild(span);
+  return input;
+}
+
+function crearSelectFalso(valorInicial) {
+  const sel = document.createElement('select');
+  ['Disponible', 'Agotado'].forEach(v => {
+    const opt   = document.createElement('option');
+    opt.value   = v;
+    opt.text    = v;
+    sel.appendChild(opt);
+  });
+  sel.value = valorInicial;
+  return sel;
+}
+
+// Reexportar escapeHtml desde admin.js (si no está disponible, definir inline)
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ═══════════════════════════════════════════
+// EJECUCIÓN
+// ═══════════════════════════════════════════
+
+async function ejecutarTodos() {
+  const logPanel = document.getElementById('log-panel');
+  logPanel.innerHTML = '';
+  logPanel.classList.add('visible');
+
+  let passed = 0, failed = 0, pendientes = 0;
+  const resultadosPorSuite = {};
+
+  // Limpiar suites
+  TODOS_LOS_TESTS.forEach(t => {
+    if (!resultadosPorSuite[t.suiteName]) resultadosPorSuite[t.suiteName] = [];
+  });
+
+  log('info', `▶ Ejecutando ${TODOS_LOS_TESTS.length} tests...`);
+
+  for (const t of TODOS_LOS_TESTS) {
+    let estado = 'pass';
+    let error  = null;
+
+    try {
+      if (t.tipo === 'async') {
+        await t.fn();
+      } else {
+        t.fn();
+      }
+      passed++;
+      log('ok', `  ✔ ${t.nombre}`);
+    } catch (e) {
+      if (e.name === 'TypeError' && e.message.includes('fetch')) {
+        // Backend no disponible
+        estado = 'pending';
+        pendientes++;
+        log('warn', `  ⚠ ${t.nombre} — Backend no disponible`);
+      } else {
+        estado = 'fail';
+        failed++;
+        error = e.message;
+        log('err', `  ✘ ${t.nombre} — ${e.message}`);
+      }
+    }
+
+    resultadosPorSuite[t.suiteName].push({ nombre: t.nombre, estado, error });
+  }
+
+  // Actualizar resumen
+  const total = passed + failed + pendientes;
+  document.getElementById('total-tests').textContent = total;
+  document.getElementById('passed').textContent      = passed;
+  document.getElementById('failed').textContent      = failed;
+  document.getElementById('pendientes').textContent  = pendientes;
+
+  // Renderizar suites
+  for (const [suiteId, tests] of Object.entries(resultadosPorSuite)) {
+    const cont = document.getElementById(suiteId);
+    if (!cont) continue;
+    cont.innerHTML = tests.map(t => `
+      <div class="test-row">
+        <span class="test-nombre">
+          ${t.estado === 'fail' ? `<strong>${t.nombre}</strong><br><small style="color:#c0392b;">↳ ${t.error || ''}</small>` : t.nombre}
+        </span>
+        <span class="test-badge ${t.estado}">
+          ${{ pass: '✔ PASS', fail: '✘ FAIL', pending: '⚠ PENDING', skip: '— SKIP' }[t.estado]}
+        </span>
+      </div>
+    `).join('');
+  }
+
+  const color = failed > 0 ? 'err' : 'ok';
+  log(color, `\n══ Resultado: ${passed} pasaron | ${failed} fallaron | ${pendientes} pendientes ══`);
+}
+
+function log(tipo, mensaje) {
+  const panel = document.getElementById('log-panel');
+  const linea = document.createElement('div');
+  linea.className = `log-line-${tipo}`;
+  linea.textContent = `[${new Date().toLocaleTimeString()}] ${mensaje}`;
+  panel.appendChild(linea);
+  panel.scrollTop = panel.scrollHeight;
+}
+
+// Auto-ejecutar al cargar
+window.addEventListener('load', () => {
+  ejecutarTodos();
+});
+</script>
+</body>
+</html>

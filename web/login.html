@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión — INGENIO ARTE & MADERA</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body class="login-page">
+
+  <div class="login-card">
+    <img src="IMG/logo.png" alt="Ingenio Arte y Madera" onerror="this.style.display='none'">
+    <h2>INGENIO ARTE & MADERA</h2>
+    <p class="subtitulo">Accede a tu cuenta para continuar</p>
+
+    <!-- Tabs -->
+    <div class="login-tabs">
+      <button class="login-tab active" data-target="form-login">Iniciar Sesión</button>
+      <button class="login-tab"        data-target="form-registro">Crear Cuenta</button>
+    </div>
+
+    <!-- Formulario Login -->
+    <div class="login-form active" id="form-login">
+      <form onsubmit="return false;" id="form-login">
+        <div class="campo-input">
+          <label for="login-usuario"><i class="bi bi-person"></i> Usuario</label>
+          <input type="text" id="login-usuario" placeholder="ej: admin" autocomplete="username">
+          <span class="campo-error"></span>
+        </div>
+
+        <div class="campo-input">
+          <label for="login-clave"><i class="bi bi-lock"></i> Contraseña</label>
+          <input type="password" id="login-clave" placeholder="••••••••" autocomplete="current-password">
+          <span class="campo-error"></span>
+        </div>
+
+        <button type="submit" class="btn-login">
+          <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+        </button>
+
+        <p class="login-mensaje" id="login-mensaje"></p>
+      </form>
+
+      <p class="login-link">
+        Usuarios demo: <strong>admin / admin123</strong> &nbsp;|&nbsp; <strong>cliente / cliente123</strong>
+      </p>
+    </div>
+
+    <!-- Formulario Registro -->
+    <div class="login-form" id="form-registro">
+      <form onsubmit="return false;" id="form-registro">
+        <div class="campo-input">
+          <label for="reg-nombre"><i class="bi bi-person-badge"></i> Nombre completo</label>
+          <input type="text" id="reg-nombre" placeholder="Tu nombre">
+          <span class="campo-error"></span>
+        </div>
+
+        <div class="campo-input">
+          <label for="reg-usuario"><i class="bi bi-at"></i> Usuario</label>
+          <input type="text" id="reg-usuario" placeholder="nombreusuario">
+          <span class="campo-error"></span>
+        </div>
+
+        <div class="campo-input">
+          <label for="reg-clave"><i class="bi bi-lock"></i> Contraseña</label>
+          <input type="password" id="reg-clave" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+          <span class="campo-error"></span>
+        </div>
+
+        <div class="campo-input">
+          <label for="reg-confirma"><i class="bi bi-lock-fill"></i> Confirmar contraseña</label>
+          <input type="password" id="reg-confirma" placeholder="Repite la contraseña" autocomplete="new-password">
+          <span class="campo-error"></span>
+        </div>
+
+        <button type="submit" class="btn-login">
+          <i class="bi bi-person-plus"></i> Crear Cuenta
+        </button>
+
+        <p class="login-mensaje" id="reg-mensaje"></p>
+      </form>
+    </div>
+
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>
