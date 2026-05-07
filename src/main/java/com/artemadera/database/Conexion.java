@@ -8,7 +8,7 @@ public class Conexion {
     // Definimos los datos arriba para que sea más ordenado
     private static final String URL = "jdbc:mysql://localhost:3306/ArteMadera";
     private static final String USUARIO = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "admin";
 
     // ESTE ES EL MÉTODO QUE TU DAO NECESITA
     public static Connection conectar() throws SQLException {
